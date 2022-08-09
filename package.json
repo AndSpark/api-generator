@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AndSpark/api-generator/issues"
   },
-  "homepage": "https://github.com/AndSpark/api-generator#readme"
+  "homepage": "https://github.com/AndSpark/api-generator#readme",
+  "dependencies": {
+    "swagger-typescript-api": "^9.3.1"
+  }
 }
