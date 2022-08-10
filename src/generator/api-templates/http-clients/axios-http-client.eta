@@ -35,26 +35,7 @@ export enum ContentType {
   UrlEncoded = "application/x-www-form-urlencoded",
 }
 
-export class HttpClient {
-    public instance: AxiosInstance; 
 
-    constructor(axiosConfig: AxiosRequestConfig) {
-        this.instance = axios.create(axiosConfig)
-    }
- 
-    public request = async <T = any, _E = any>(config
-<% if (config.unwrapResponseData) { %>
-    : AxiosRequestConfig): Promise<T> => {
-<% } else { %>
-    : AxiosRequestConfig): Promise<AxiosResponse<T>> => {
-<% } %>
-
-        return this.instance.request(
-            config
-<% if (config.unwrapResponseData) { %>
-        ).then(response => response.data);
-<% } else { %>
-        );
-<% } %>
-    };
+interface HttpClient {
+	request: <T = any, _E = any>(config: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
 }

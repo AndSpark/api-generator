@@ -1875,7 +1875,7 @@ export class GetRoleParams {
   type?: "Auditing" | "Common" | "Security" | "System" | "Work";
 }
 
-export class ExistParams7 {
+export class ExistParams5 {
   descriptionLike?: string;
   idIn?: number[];
   name?: string;
@@ -2150,7 +2150,7 @@ export class GetUserParams {
   usernameLike?: string;
 }
 
-export class ExistParams2 {
+export class ExistParams6 {
   /** 根据可管理部门id查询。支持多选 */
   adminDepartmentId?: number[];
 
@@ -2342,7 +2342,7 @@ export class MessageSessionOnlineUsersCountParams {
   topic?: string;
 }
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
+import { AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
@@ -2377,16 +2377,8 @@ export enum ContentType {
   UrlEncoded = "application/x-www-form-urlencoded",
 }
 
-export class HttpClient {
-  public instance: AxiosInstance;
-
-  constructor(axiosConfig: AxiosRequestConfig) {
-    this.instance = axios.create(axiosConfig);
-  }
-
-  public request = async <T = any, _E = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
-    return this.instance.request(config);
-  };
+interface HttpClient {
+  request: <T = any, _E = any>(config: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
 }
 
 /**
@@ -4302,7 +4294,7 @@ class Api {
      * @response `403` `void` Forbidden
      * @response `404` `void` Not Found
      */
-    exist: (query: ExistParams7, config: AxiosRequestConfig = {}) =>
+    exist: (query: ExistParams5, config: AxiosRequestConfig = {}) =>
       this.http.request<boolean, void>({
         url: `/auth/role/exist`,
         method: "GET",
@@ -5110,7 +5102,7 @@ class Api {
      * @response `403` `void` Forbidden
      * @response `404` `void` Not Found
      */
-    exist: (query: ExistParams2, config: AxiosRequestConfig = {}) =>
+    exist: (query: ExistParams6, config: AxiosRequestConfig = {}) =>
       this.http.request<boolean, void>({
         url: `/auth/user/exist`,
         method: "GET",
@@ -5964,6 +5956,6 @@ class Api {
   };
 }
 
-import request from "@/utils/request";
+import { httpClient } from "../utils/request";
 
-export const authApi = new Api({ request } as HttpClient);
+export const authApi = new Api(httpClient);

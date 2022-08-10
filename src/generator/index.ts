@@ -10,7 +10,7 @@ const generateList = [
 	},
 ]
 
-function bootstrap() {
+function bootstrap(config?: GeneratorConfig) {
 	generateList.map(({ name, url }) => {
 		generateApi({
 			url,
@@ -40,15 +40,16 @@ function bootstrap() {
 			},
 		}).then(({ files, configuration }) => {
 			files.forEach(({ content, name }) => {
-				fs.writeFileSync(
-					path.resolve(__dirname, '../api', name),
-					content
+				let data = content
+				if (config?.useClassInterface !== false) {
+					data = content
 						.replace(/class[\s\S]+?\}/g, p => {
 							return p.replace(/ object;/g, ' any;')
 						})
 						.replace(/\= object;/g, '= any;')
 						.replace(/ object>/g, ' any>')
-				)
+				}
+				fs.writeFileSync(path.resolve(__dirname, '../api', name), data)
 			})
 		})
 	})
