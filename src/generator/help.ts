@@ -105,11 +105,11 @@ const createOptionId = (str: string) => {
 }
 
 export const createIndex = (fileNames: string[]) => {
-	const content = fileNames
+	let content = fileNames
 		.map(v => {
 			return `export { ${v.replace('.ts', '')}Api } from './${v.replace('.ts', '')}'`
 		})
 		.join('\n')
-
+	content += `\nexport { install } from '../utils/request'`
 	writeFileSync(resolve(__dirname, '../api/index.ts'), content)
 }
