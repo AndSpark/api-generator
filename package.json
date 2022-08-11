@@ -1,6 +1,6 @@
 {
-	"name": "api-generator",
-	"version": "1.0.0",
+	"name": "auto-api-generator",
+	"version": "1.0.1",
 	"description": "auto generate api",
 	"main": "src/api/index.ts",
 	"scripts": {
