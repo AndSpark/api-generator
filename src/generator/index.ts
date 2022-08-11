@@ -1,7 +1,8 @@
 import { generateApi } from 'swagger-typescript-api'
 import * as fs from 'fs'
 import * as path from 'path'
-import { onInit } from './help'
+import { createIndex, onInit } from './help'
+import { GeneratorConfig } from '../types'
 
 const generateList = [
 	{
@@ -51,6 +52,8 @@ function bootstrap(config?: GeneratorConfig) {
 				}
 				fs.writeFileSync(path.resolve(__dirname, '../api', name), data)
 			})
+
+			createIndex(files.map(v => v.name))
 		})
 	})
 }

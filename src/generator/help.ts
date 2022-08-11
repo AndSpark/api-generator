@@ -1,3 +1,5 @@
+import { writeFileSync } from 'fs'
+import { resolve } from 'path'
 export const onInit = (configuration: any) => {
 	//@ts-ignore
 	const paths = configuration.swaggerSchema.paths as any
@@ -100,4 +102,14 @@ const createOptionId = (str: string) => {
 			})
 		return str.replace(/[-\/]+(\w)/g, (m, m1) => m1.toUpperCase())
 	}
+}
+
+export const createIndex = (fileNames: string[]) => {
+	const content = fileNames
+		.map(v => {
+			return `export { ${v.replace('.ts', '')}Api } from './${v.replace('.ts', '')}'`
+		})
+		.join('\n')
+
+	writeFileSync(resolve(__dirname, '../api/index.ts'), content)
 }

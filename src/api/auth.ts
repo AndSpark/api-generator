@@ -1875,7 +1875,7 @@ export class GetRoleParams {
   type?: "Auditing" | "Common" | "Security" | "System" | "Work";
 }
 
-export class ExistParams5 {
+export class ExistParams2 {
   descriptionLike?: string;
   idIn?: number[];
   name?: string;
@@ -2008,7 +2008,7 @@ export class ToOssParams {
   overwrite?: boolean;
 }
 
-export class ByIdParams9 {
+export class ByIdParams1 {
   /** format */
   format?: string;
 
@@ -2150,7 +2150,7 @@ export class GetUserParams {
   usernameLike?: string;
 }
 
-export class ExistParams6 {
+export class ExistParams10 {
   /** 根据可管理部门id查询。支持多选 */
   adminDepartmentId?: number[];
 
@@ -4294,7 +4294,7 @@ class Api {
      * @response `403` `void` Forbidden
      * @response `404` `void` Not Found
      */
-    exist: (query: ExistParams5, config: AxiosRequestConfig = {}) =>
+    exist: (query: ExistParams2, config: AxiosRequestConfig = {}) =>
       this.http.request<boolean, void>({
         url: `/auth/role/exist`,
         method: "GET",
@@ -4839,7 +4839,7 @@ class Api {
      * @response `403` `void` Forbidden
      * @response `404` `void` Not Found
      */
-    byId: ({ id, ...query }: ByIdParams9, config: AxiosRequestConfig = {}) =>
+    byId: ({ id, ...query }: ByIdParams1, config: AxiosRequestConfig = {}) =>
       this.http.request<Resource, void>({
         url: `/auth/storage/${id}`,
         method: "GET",
@@ -5102,7 +5102,7 @@ class Api {
      * @response `403` `void` Forbidden
      * @response `404` `void` Not Found
      */
-    exist: (query: ExistParams6, config: AxiosRequestConfig = {}) =>
+    exist: (query: ExistParams10, config: AxiosRequestConfig = {}) =>
       this.http.request<boolean, void>({
         url: `/auth/user/exist`,
         method: "GET",
