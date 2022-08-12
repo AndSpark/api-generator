@@ -102,5 +102,4 @@
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/generator/api-templates/**/*.eta"],
-	"exclude": ["src/api/*.ts"]
 }
