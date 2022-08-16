@@ -6,3 +6,13 @@ export interface HttpClient {
 export interface GeneratorConfig {
 	useClassInterface?: boolean
 }
+
+export interface ApiConfig {
+	name: string
+	npmToken: string
+	generatorConfig?: GeneratorConfig
+	list: {
+		name: string
+		url: string
+	}[]
+}

@@ -1,8 +1,5 @@
 import express from 'express'
 import { apiGenerate } from './generator'
-import { updateNpm } from './utils/update'
-
-updateNpm()
 
 const app = express()
 app.use(express.json())
@@ -14,15 +11,9 @@ app.get('/api-generator', (req, res) => {
 })
 
 app.post('/api-generator', async (req, res) => {
-	const apiList = req.body.apiList || []
-	const config = req.body.config || {}
-	if (!apiList.length) {
-		res.status(400)
-		res.send('need apiList')
-	} else {
-		await apiGenerate(apiList, config)
-		res.send('ok')
-	}
+	const apiConfig = req.body.apiConfig || []
+	const info = await apiGenerate(apiConfig)
+	res.send(info)
 })
 
 app.listen(port, () => {

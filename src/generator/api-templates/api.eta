@@ -68,7 +68,7 @@ class Api  {
 <% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
   
 <% }) %>
-import {httpClient} from '../utils/request'
+import {httpClient} from './_request'
 
 export const <%~ fileName.replace('.ts','') + 'Api' %> = new Api(httpClient)
 

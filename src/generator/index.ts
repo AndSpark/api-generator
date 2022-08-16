@@ -1,15 +1,13 @@
 import { generateApi } from 'swagger-typescript-api'
 import * as fs from 'fs'
 import * as path from 'path'
-import { createIndex, onInit } from './help'
-import { GeneratorConfig } from '../types'
+import { createApiDir, createIndex, createPackage, onInit } from './help'
+import { ApiConfig, GeneratorConfig } from '../types'
 
-export async function apiGenerate(
-	generateList: { name: string; url: string }[],
-	config?: GeneratorConfig
-) {
+export async function apiGenerate(apiConfig: ApiConfig) {
+	createApiDir()
 	await Promise.all(
-		generateList.map(({ name, url }) => {
+		apiConfig.list.map(({ name, url }) => {
 			return new Promise(res => {
 				generateApi({
 					url,
@@ -40,7 +38,7 @@ export async function apiGenerate(
 				}).then(({ files, configuration }) => {
 					files.forEach(({ content, name }) => {
 						let data = content
-						if (config?.useClassInterface !== false) {
+						if (apiConfig.generatorConfig?.useClassInterface !== false) {
 							data = content
 								.replace(/class[\s\S]+?\}/g, p => {
 									return p.replace(/ object;/g, ' any;')
@@ -48,12 +46,13 @@ export async function apiGenerate(
 								.replace(/\= object;/g, '= any;')
 								.replace(/ object>/g, ' any>')
 						}
-						fs.writeFileSync(path.resolve(__dirname, '../api', name), data)
+						fs.writeFileSync(path.resolve(__dirname, '../../api', name), data)
 					})
 					res('')
 				})
 			})
 		})
 	)
-	createIndex(generateList.map(v => v.name))
+	createIndex(apiConfig.list.map(v => v.name))
+	return await createPackage(apiConfig.name, apiConfig.npmToken)
 }
