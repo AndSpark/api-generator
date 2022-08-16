@@ -4,11 +4,11 @@ import * as path from 'path'
 import { createIndex, onInit } from './help'
 import { GeneratorConfig } from '../types'
 
-export function apiGenerate(
+export async function apiGenerate(
 	generateList: { name: string; url: string }[],
 	config?: GeneratorConfig
 ) {
-	Promise.all(
+	await Promise.all(
 		generateList.map(({ name, url }) => {
 			return new Promise(res => {
 				generateApi({
@@ -54,7 +54,6 @@ export function apiGenerate(
 				})
 			})
 		})
-	).then(_ => {
-		createIndex(generateList.map(v => v.name))
-	})
+	)
+	createIndex(generateList.map(v => v.name))
 }
