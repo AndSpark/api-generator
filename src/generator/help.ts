@@ -2,8 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import { execSync } from 'child_process'
 import axios from 'axios'
+import { ApiConfig } from '../types'
 
 const apiDir = path.resolve(__dirname, '../../api')
+
+const defaultRegistry = 'https://registry.npmjs.org/'
 
 export const onInit = (configuration: any) => {
 	//@ts-ignore
@@ -132,28 +135,16 @@ export const createApiDir = () => {
 export const createPackage = async (
 	name: string,
 	npmrc: string,
-	config: Record<string, any> = {}
+	config: ApiConfig['packageConfig']
 ) => {
-	const res = await axios.get('https://www.npmjs.com/search', {
-		params: {
-			q: name,
-		},
-		headers: {
-			accept: '*/*',
-			'accept-language': 'zh-CN,zh;q=0.9',
-			'sec-ch-ua': '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"',
-			'sec-ch-ua-mobile': '?0',
-			'sec-ch-ua-platform': '"macOS"',
-			'sec-fetch-dest': 'empty',
-			'sec-fetch-mode': 'cors',
-			'sec-fetch-site': 'same-origin',
-			'x-requested-with': 'XMLHttpRequest',
-			'x-spiferack': '1',
-		},
-	})
+	let registry = defaultRegistry
+	if (config?.publishConfig?.registry) {
+		registry = config.publishConfig.registry
+	}
+	const res = await axios.get(registry + '/' + name)
 	let version
-	if (res.data.packageVersion?.version) {
-		version = res.data.packageVersion?.version
+	if (res.data['dist-tags']?.latest) {
+		version = res.data['dist-tags']?.latest
 	}
 	const packageData = packageJson(name, version || '1.0.0', config)
 	fs.writeFileSync(path.resolve(apiDir, 'package.json'), packageData)

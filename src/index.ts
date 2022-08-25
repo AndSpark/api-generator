@@ -12,6 +12,7 @@ app.post('/api-generator', async (req, res) => {
 		const info = await apiGenerate(apiConfig)
 		res.send(info)
 	} catch (error) {
+		console.log(error)
 		res.send(error)
 	}
 })

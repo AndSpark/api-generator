@@ -14,11 +14,11 @@ const list = [
 				list,
 				name: 'test-api2',
 				npmrc: `
-				registry=https://govfun.com:10073/repository/npm-group/
+				_auth=YWRtaW46Z2RuLi4u
  				`,
 				packageConfig: {
 					publishConfig: {
-						registry: 'https://govfun.com:10073/repository/npm-local',
+						registry: 'https://govfun.com:10073/repository/npm-local/',
 					},
 				},
 			},
