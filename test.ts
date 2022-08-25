@@ -14,7 +14,7 @@ const list = [
 				list,
 				name: 'test-api2',
 				npmrc: `
-				_auth=YWRtaW46Z2RuLi4u
+				
  				`,
 				packageConfig: {
 					publishConfig: {
