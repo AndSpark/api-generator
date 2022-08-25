@@ -3,8 +3,8 @@ import 'dotenv/config'
 
 const list = [
 	{
-		name: 'test.ts',
-		url: 'http://192.168.200.34:9999/v2/api-docs',
+		name: 'auth.ts',
+		url: 'http://192.168.200.12:5000/auth/v2/api-docs?group=AuthService%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3',
 	},
 ]
 ;(function () {
@@ -12,8 +12,16 @@ const list = [
 		.post('http://localhost:3313/api-generator', {
 			apiConfig: {
 				list,
-				name: '@andspark/test-api',
-				npmrc: `11`,
+				name: 'test-api2',
+				npmrc: `
+				registry=https://govfun.com:10073/repository/npm-group/
+				_auth=YWRtaW46Z2RuLi4u
+				`,
+				packageConfig: {
+					publishConfig: {
+						registry: 'https://govfun.com:10073/repository/npm-local',
+					},
+				},
 			},
 		})
 		.catch(e => {

@@ -6,14 +6,14 @@ app.use(express.json())
 
 const port = 3313
 
-app.get('/api-generator', (req, res) => {
-	res.send('ok')
-})
-
 app.post('/api-generator', async (req, res) => {
 	const apiConfig = req.body.apiConfig || []
-	const info = await apiGenerate(apiConfig)
-	res.send(info)
+	try {
+		const info = await apiGenerate(apiConfig)
+		res.send(info)
+	} catch (error) {
+		res.send(error)
+	}
 })
 
 app.listen(port, () => {

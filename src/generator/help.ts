@@ -129,7 +129,11 @@ export const createApiDir = () => {
 	}
 }
 
-export const createPackage = async (name: string, npmrc: string) => {
+export const createPackage = async (
+	name: string,
+	npmrc: string,
+	config: Record<string, any> = {}
+) => {
 	const res = await axios.get('https://www.npmjs.com/search', {
 		params: {
 			q: name,
@@ -151,15 +155,14 @@ export const createPackage = async (name: string, npmrc: string) => {
 	if (res.data.packageVersion?.version) {
 		version = res.data.packageVersion?.version
 	}
-	const packageData = packageJson(name, version || '1.0.0')
-	const axiosTypes = fs.readFileSync(path.resolve(__dirname, './axios.d.ts'), 'utf-8')
+	const packageData = packageJson(name, version || '1.0.0', config)
 	fs.writeFileSync(path.resolve(apiDir, 'package.json'), packageData)
 	fs.writeFileSync(path.resolve(apiDir, '.npmrc'), npmrc)
 	fs.writeFileSync(path.resolve(apiDir, 'tsconfig.json'), tsconfig)
-	fs.writeFileSync(path.resolve(apiDir, 'axios.d.ts'), axiosTypes)
 	if (version) {
 		execSync('npm version patch', { cwd: apiDir })
 	}
+	execSync('npm install', { cwd: apiDir })
 	execSync('tsc', { cwd: apiDir })
 	execSync('npm publish', { cwd: apiDir })
 	return packageData
@@ -182,7 +185,7 @@ function removeDir(dir: string) {
 }
 
 const indexTs = `
-import { AxiosRequestConfig, AxiosResponse } from './axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 let isInstall = false
 
@@ -192,7 +195,7 @@ interface HttpClient {
 
 //@ts-ignore
 export const httpClient: HttpClient = {
-	request(config: AxiosRequestConfig) {
+	request(config: AxiosRequestConfig):any {
 		if (!isInstall) {
 			throw new Error('please install http client first')
 		}
@@ -212,6 +215,9 @@ const packageJson = (name: string, version: string = '1.0.0', configs: Record<st
 			version,
 			main: 'build/index.js',
 			license: 'private',
+			dependencies: {
+				axios: '0.27.2',
+			},
 			...configs,
 		},
 		null,
@@ -224,9 +230,10 @@ const tsconfig = `
 		"target": "ES2015",
 		"declaration": true,
 		"useDefineForClassFields": true,
-		"outDir": "build"
+		"outDir": "build",
+		"moduleResolution": "node"
 	},
-	"include": ["./*.ts"]
+	"include": ["./*.ts","./*.d.ts"]
 }
 
 `

@@ -10,6 +10,7 @@ export interface GeneratorConfig {
 export interface ApiConfig {
 	name: string
 	npmrc: string
+	packageConfig?: Record<string, any>
 	generatorConfig?: GeneratorConfig
 	list: {
 		name: string

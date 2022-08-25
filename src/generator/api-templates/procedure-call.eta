@@ -93,5 +93,5 @@ const describeReturnType = () => {
         <%~ bodyTmpl ? `data: ${bodyTmpl},` : '' %>
         <%~ securityTmpl ? `secure: ${securityTmpl},` : '' %>
         <%~ responseFormatTmpl ? `responseType: ${responseFormatTmpl},` : '' %>
-				...config
+				...axiosConfig
     })<%~ route.namespace ? ',' : '' %>
