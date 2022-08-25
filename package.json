@@ -24,6 +24,7 @@
 		"swagger-typescript-api": "^9.3.1"
 	},
 	"dependencies": {
-		"dotenv": "^16.0.1"
+		"dotenv": "^16.0.1",
+		"test-api": "^1.0.3"
 	}
 }

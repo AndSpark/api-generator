@@ -129,7 +129,7 @@ export const createApiDir = () => {
 	}
 }
 
-export const createPackage = async (name: string, token: string) => {
+export const createPackage = async (name: string, npmrc: string) => {
 	const res = await axios.get('https://www.npmjs.com/search', {
 		params: {
 			q: name,
@@ -152,11 +152,15 @@ export const createPackage = async (name: string, token: string) => {
 		version = res.data.packageVersion?.version
 	}
 	const packageData = packageJson(name, version || '1.0.0')
+	const axiosTypes = fs.readFileSync(path.resolve(__dirname, './axios.d.ts'), 'utf-8')
 	fs.writeFileSync(path.resolve(apiDir, 'package.json'), packageData)
-	fs.writeFileSync(path.resolve(apiDir, '.npmrc'), npmrc(token))
+	fs.writeFileSync(path.resolve(apiDir, '.npmrc'), npmrc)
+	fs.writeFileSync(path.resolve(apiDir, 'tsconfig.json'), tsconfig)
+	fs.writeFileSync(path.resolve(apiDir, 'axios.d.ts'), axiosTypes)
 	if (version) {
 		execSync('npm version patch', { cwd: apiDir })
 	}
+	execSync('tsc', { cwd: apiDir })
 	execSync('npm publish', { cwd: apiDir })
 	return packageData
 }
@@ -201,27 +205,28 @@ export const install = (request: HttpClient['request']) => {
 }
 `
 
-const packageJson = (name: string, version: string = '1.0.0') =>
+const packageJson = (name: string, version: string = '1.0.0', configs: Record<string, any> = {}) =>
 	JSON.stringify(
 		{
 			name,
 			version,
-			description: '',
-			main: 'index.ts',
-			keywords: [],
-			author: '',
-			license: 'ISC',
-			dependencies: {
-				axios: '^0.27.2',
-			},
+			main: 'build/index.js',
+			license: 'private',
+			...configs,
 		},
 		null,
 		2
 	)
 
-const npmrc = (token: string) => `
-registry=https://registry.npmjs.org
-//registry.npmjs.org/:_authToken=${token}
-access=public
+const tsconfig = `
+{
+	"compilerOptions": {
+		"target": "ES2015",
+		"declaration": true,
+		"useDefineForClassFields": true,
+		"outDir": "build"
+	},
+	"include": ["./*.ts"]
+}
 
 `

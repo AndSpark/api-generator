@@ -85,7 +85,7 @@ const describeReturnType = () => {
 <%~ routeDocs.lines %>
 
  */
-<%~ route.routeName.usage %><%~ route.namespace ? ': ' : ' = ' %>(<%~ wrapperArgs %> <%~ wrapperArgs.length ? ",config:AxiosRequestConfig = {}" : "config:AxiosRequestConfig = {}" %> )<%~ config.toJS ? `: ${describeReturnType()}` : "" %> =>
+<%~ route.routeName.usage %><%~ route.namespace ? ': ' : ' = ' %>(<%~ wrapperArgs %> <%~ wrapperArgs.length ? ",axiosConfig:AxiosRequestConfig = {}" : "axiosConfig:AxiosRequestConfig = {}" %> )<%~ config.toJS ? `: ${describeReturnType()}` : "" %> =>
     <%~ config.singleHttpClient ? 'this.http.request' : 'this.request' %><<%~  isBlob ? "Blob" : type  %>, <%~ errorType %>>({
         url: `<%~ path %>`,
         method: '<%~ _.upperCase(method) %>',

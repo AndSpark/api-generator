@@ -54,5 +54,5 @@ export async function apiGenerate(apiConfig: ApiConfig) {
 		})
 	)
 	createIndex(apiConfig.list.map(v => v.name))
-	return await createPackage(apiConfig.name, apiConfig.npmToken)
+	return await createPackage(apiConfig.name, apiConfig.npmrc)
 }

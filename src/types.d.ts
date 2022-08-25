@@ -9,7 +9,7 @@ export interface GeneratorConfig {
 
 export interface ApiConfig {
 	name: string
-	npmToken: string
+	npmrc: string
 	generatorConfig?: GeneratorConfig
 	list: {
 		name: string
