@@ -1,12 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { execSync } from 'child_process'
-import axios from 'axios'
-import { ApiConfig } from '../types'
-
 const apiDir = path.resolve(__dirname, '../../api')
-
-const defaultRegistry = 'https://registry.npmjs.org/'
 
 export const onInit = (configuration: any) => {
 	//@ts-ignore
@@ -132,33 +126,6 @@ export const createApiDir = () => {
 	}
 }
 
-export const createPackage = async (
-	name: string,
-	npmrc: string,
-	config: ApiConfig['packageConfig']
-) => {
-	let registry = defaultRegistry
-	if (config?.publishConfig?.registry) {
-		registry = config.publishConfig.registry
-	}
-	const res = await axios.get(registry + '/' + name)
-	let version
-	if (res.data['dist-tags']?.latest) {
-		version = res.data['dist-tags']?.latest
-	}
-	const packageData = packageJson(name, version || '1.0.0', config)
-	fs.writeFileSync(path.resolve(apiDir, 'package.json'), packageData)
-	fs.writeFileSync(path.resolve(apiDir, '.npmrc'), npmrc)
-	fs.writeFileSync(path.resolve(apiDir, 'tsconfig.json'), tsconfig)
-	if (version) {
-		execSync('npm version patch', { cwd: apiDir })
-	}
-	execSync('npm install', { cwd: apiDir })
-	execSync('tsc', { cwd: apiDir })
-	execSync('npm publish', { cwd: apiDir })
-	return packageData
-}
-
 function removeDir(dir: string) {
 	let files = fs.readdirSync(dir)
 	for (var i = 0; i < files.length; i++) {
@@ -197,34 +164,4 @@ export const install = (request: HttpClient['request']) => {
 	httpClient.request = request
 	isInstall = true
 }
-`
-
-const packageJson = (name: string, version: string = '1.0.0', configs: Record<string, any> = {}) =>
-	JSON.stringify(
-		{
-			name,
-			version,
-			main: 'build/index.js',
-			license: 'private',
-			dependencies: {
-				axios: '0.27.2',
-			},
-			...configs,
-		},
-		null,
-		2
-	)
-
-const tsconfig = `
-{
-	"compilerOptions": {
-		"target": "ES2015",
-		"declaration": true,
-		"useDefineForClassFields": true,
-		"outDir": "build",
-		"moduleResolution": "node"
-	},
-	"include": ["./*.ts","./*.d.ts"]
-}
-
 `

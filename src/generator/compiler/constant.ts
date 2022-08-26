@@ -1,27 +1,3 @@
-export const indexTs = `
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
-
-let isInstall = false
-
-interface HttpClient {
-	request: <T = any, _E = any>(config: AxiosRequestConfig) => Promise<AxiosResponse<T>>
-}
-
-//@ts-ignore
-export const httpClient: HttpClient = {
-	request(config: AxiosRequestConfig):any {
-		if (!isInstall) {
-			throw new Error('please install http client first')
-		}
-	},
-}
-
-export const install = (request: HttpClient['request']) => {
-	httpClient.request = request
-	isInstall = true
-}
-`
-
 export const packageJson = (
 	name: string,
 	version: string = '1.0.0',

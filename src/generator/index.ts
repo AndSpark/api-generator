@@ -1,8 +1,8 @@
 import { generateApi } from 'swagger-typescript-api'
 import * as fs from 'fs'
 import * as path from 'path'
-import { createApiDir, createIndex, createPackage, onInit } from './help'
-import { ApiConfig, GeneratorConfig } from '../types'
+import { createApiDir, createIndex, onInit } from './help'
+import { ApiConfig } from '../types'
 import { compiler } from './compiler'
 
 export async function apiGenerate(apiConfig: ApiConfig) {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import 'dotenv/config'
-import { apiGenerate } from './src/generator'
+
 const list = [
 	{
 		name: 'auth.ts',
@@ -23,7 +23,7 @@ const list = [
 				list,
 				name: 'test-api2',
 				npmrc: `
-
+				
  				`,
 				packageConfig: {
 					publishConfig: {
