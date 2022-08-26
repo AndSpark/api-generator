@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { createApiDir, createIndex, createPackage, onInit } from './help'
 import { ApiConfig, GeneratorConfig } from '../types'
+import { compiler } from './compiler'
 
 export async function apiGenerate(apiConfig: ApiConfig) {
 	createApiDir()
@@ -54,5 +55,6 @@ export async function apiGenerate(apiConfig: ApiConfig) {
 		})
 	)
 	createIndex(apiConfig.list.map(v => v.name))
-	return await createPackage(apiConfig.name, apiConfig.npmrc, apiConfig.packageConfig || {})
+
+	await compiler(apiConfig)
 }
